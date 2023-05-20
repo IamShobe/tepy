@@ -102,7 +102,6 @@ class App:
 
     async def run(self):
         for renderer in self.render_list:
-            print(renderer)
             renderer.initialize(editor=self.editor)
 
         await asyncio.gather(self.input_loop(), self.draw_loop())
