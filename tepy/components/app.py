@@ -1,8 +1,7 @@
 import asyncio
 import sys
 import tempfile
-from subprocess import call
-from typing import List, Protocol
+from typing import List
 
 from blessed import Terminal
 from colored import attr
