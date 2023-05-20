@@ -1,7 +1,5 @@
 import threading
 
-import time
-
 import asyncio
 
 from cached_property import cached_property
@@ -10,6 +8,7 @@ from typing import Union
 from colored import attr
 
 from tepy.components.custom_string import String
+from tepy.components.editor import BaseEditor
 from tepy.components.keys import RIGHT_KEYS, is_match, LEFT_KEYS, UP_KEYS, DOWN_KEYS, ENTER_KEYS, BACK_KEYS, END_OF_LINE_KEYS, START_OF_LINE_KEYS, \
     START_OF_DOC_KEYS, END_OF_DOC_KEYS, COPY_KEYS
 from tepy.components.utils import FPS
@@ -36,8 +35,17 @@ class Renderer:
 
         self._shown = True
 
-    def initialize(self):
-        pass
+        self._editor: BaseEditor | None = None
+
+    def initialize(self, *, editor: BaseEditor = None):
+        self._editor = editor
+
+    @property
+    def editor(self):
+        if not self._editor:
+            raise RuntimeError('Editor was not initialized!')
+
+        return self._editor
 
     @property
     def shown(self):
@@ -127,6 +135,9 @@ class Renderer:
         event = threading.Event()
         self._blocking_action = dict(handler=routine, args=args, kwargs=kwargs, event=event)
         event.wait()
+
+    def edit_file(self, file_path: str):
+        self.editor.edit(file_path)
 
     def draw(self):
         pass

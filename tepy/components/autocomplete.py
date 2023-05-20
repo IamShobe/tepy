@@ -4,7 +4,6 @@ from colored import attr, fg
 
 from tepy.components.custom_string import String
 from tepy.components.keys import RIGHT_KEYS, is_match
-from tepy.components.logger import logger
 from tepy.components.mode import KeyMode
 from tepy.components.renderer import Renderer
 

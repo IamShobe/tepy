@@ -8,6 +8,7 @@ from blessed import Terminal
 from colored import attr
 
 from tepy.components.custom_string import String
+from tepy.components.editor import TextEditor, BaseEditor
 from tepy.components.renderer import Renderer
 from tepy.components.utils import FPS
 from tepy.ui.base_ui import BaseUI
@@ -18,7 +19,7 @@ class App:
             self,
             render_list: list[Renderer],
             *,
-            editor=None,
+            editor: BaseEditor = TextEditor(),
             ui: BaseUI = sys.stdout,
     ):
         self.term = Terminal()
@@ -68,7 +69,7 @@ class App:
         with tempfile.NamedTemporaryFile(suffix=".tmp") as tf:
             tf.write(initial_text.encode())
             tf.flush()
-            call([self.editor, tf.name])
+            self.editor.edit(tf.name)
             tf.seek(0)
             return tf.read().decode()
 
@@ -101,6 +102,7 @@ class App:
 
     async def run(self):
         for renderer in self.render_list:
-            renderer.initialize()
+            print(renderer)
+            renderer.initialize(editor=self.editor)
 
         await asyncio.gather(self.input_loop(), self.draw_loop())
